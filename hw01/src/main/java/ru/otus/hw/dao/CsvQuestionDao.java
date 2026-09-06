@@ -6,9 +6,9 @@ import ru.otus.hw.config.TestFileNameProvider;
 import ru.otus.hw.dao.dto.QuestionDto;
 import ru.otus.hw.domain.Question;
 import ru.otus.hw.exceptions.QuestionReadException;
+import ru.otus.hw.utils.FileUtil;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
@@ -16,31 +16,28 @@ import java.util.List;
 public class CsvQuestionDao implements QuestionDao {
     private final TestFileNameProvider fileNameProvider;
 
+    private final FileUtil fileUtil;
+
     @Override
     public List<Question> findAll() {
-        var resource = getResourceByFileName(fileNameProvider.getTestFileName());
-        try (var inputStreamReader = new InputStreamReader(resource)) {
-            List<QuestionDto> questionDtoList = new CsvToBeanBuilder<QuestionDto>(inputStreamReader)
+        var questionDtoList = parseCsvFromFile(fileNameProvider.getTestFileName());
+        return questionDtoList.stream()
+                .map(QuestionDto::toDomainObject)
+                .toList();
+    }
+
+    private List<QuestionDto> parseCsvFromFile(String fileName) {
+        var inputStream = fileUtil.getResourceByFileName(fileName);
+        try (var inputStreamReader = new InputStreamReader(inputStream)) {
+            return new CsvToBeanBuilder<QuestionDto>(inputStreamReader)
                     .withType(QuestionDto.class)
                     .withSeparator(';')
                     .withSkipLines(1)
                     .build()
                     .parse();
-            return questionDtoList.stream()
-                    .map(QuestionDto::toDomainObject)
-                    .toList();
         } catch (IOException e) {
             throw new QuestionReadException("Ошибка при чтении файла", e);
         }
     }
 
-    private InputStream getResourceByFileName(String fileName) {
-        var resource = Thread.currentThread()
-                .getContextClassLoader()
-                .getResourceAsStream(fileName);
-        if (resource == null) {
-            throw new QuestionReadException("Не найден ресурс с именем " + fileNameProvider.getTestFileName());
-        }
-        return resource;
-    }
 }

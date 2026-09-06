@@ -10,20 +10,16 @@
         <constructor-arg index="0" value="questions.csv"/>
     </bean>
 
+    <bean id="fileUtil" class="ru.otus.hw.utils.FileUtil"/>
+
     <bean id="questionDao" class="ru.otus.hw.dao.CsvQuestionDao">
         <constructor-arg index="0" ref="testFileNameProvider"/>
+        <constructor-arg index="1" ref="fileUtil"/>
     </bean>
 
     <bean id="ioService" class="ru.otus.hw.service.StreamsIOService">
         <constructor-arg index="0">
             <util:constant static-field="java.lang.System.out"/>
-        </constructor-arg>
-        <constructor-arg index="1">
-            <bean class="java.util.Scanner">
-                <constructor-arg>
-                    <util:constant static-field="java.lang.System.in"/>
-                </constructor-arg>
-            </bean>
         </constructor-arg>
     </bean>
 

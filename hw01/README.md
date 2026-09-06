@@ -1,4 +1,12 @@
 # Приложение для проведения тестирования на основе фиксированного списка вопросов
+## Команда для запуска:
+
+`mvn -f hw01/pom.xml compile exec:java -Dexec.mainClass=ru.otus.hw.Application`
+
+```
+mvn -f hw01/pom.xml clean package
+java -jar hw01/target/hw01-xml-config-1.0.jar
+```
 
 ## Описание/Пошаговая инструкция выполнения домашнего задания:
 ### Общая задача для двух первых ДЗ:
@@ -39,3 +47,4 @@
 
 
 Заготовка для выполнения работы: https://github.com/OtusTeam/Spring/tree/master/templates/hw01-xml-config
+
