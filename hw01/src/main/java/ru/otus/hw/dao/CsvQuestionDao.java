@@ -36,7 +36,7 @@ public class CsvQuestionDao implements QuestionDao {
                     .build()
                     .parse();
         } catch (IOException e) {
-            throw new QuestionReadException("Ошибка при чтении файла", e);
+            throw new QuestionReadException("Ошибка при чтении файла " + fileName, e);
         }
     }
 

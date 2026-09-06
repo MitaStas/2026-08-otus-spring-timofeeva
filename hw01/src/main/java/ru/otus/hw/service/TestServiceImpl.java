@@ -17,8 +17,7 @@ public class TestServiceImpl implements TestService {
     public void executeTest() {
         printTestIntroduction();
         var questions = questionDao.findAll();
-        printQuestions(questions);
-
+        printAllQuestions(questions);
     }
 
     private void printTestIntroduction() {
@@ -26,7 +25,7 @@ public class TestServiceImpl implements TestService {
         ioService.printFormattedLine("Please answer the questions below%n");
     }
 
-    private void printQuestions(List<Question> questions) {
+    private void printAllQuestions(List<Question> questions) {
         questions.forEach(this::printQuestion);
     }
 
