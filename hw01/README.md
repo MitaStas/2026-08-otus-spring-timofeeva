@@ -1,10 +1,10 @@
 # Приложение для проведения тестирования на основе фиксированного списка вопросов
 ## Команда для запуска:
 
-`mvn -f hw01/pom.xml compile exec:java -Dexec.mainClass=ru.otus.hw.Application`
+`mvn compile exec:java -Dexec.mainClass=ru.otus.hw.Application`
 
 ```
-mvn -f hw01/pom.xml clean package
+mvn clean package
 java -jar hw01/target/hw01-xml-config-1.0.jar
 ```
 
