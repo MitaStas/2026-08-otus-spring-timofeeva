@@ -1,0 +1,6 @@
+# Добавить сюда своих вопросов. Эту строку надо пропустить при настройке CsvToBean (withSkipLines)
+Which Java collection allows duplicate elements?;ArrayList%true|HashSet%false|EnumSet%false|TreeSet%false
+Which HTTP status code means that a resource was not found?;200%false|201%false|404%true|500%false
+Which SQL clause is used to sort query results?;WHERE%false|GROUP BY%false|ORDER BY%true
+Which keyword prevents a Java variable from being reassigned?;static%false|final%true|public%false|volatile%false|abstract%false
+What is the main purpose of a unit test?;To test a small piece of code in isolation%true|To deploy an application to production%false|To replace all integration tests%false|To configure a database server%false
