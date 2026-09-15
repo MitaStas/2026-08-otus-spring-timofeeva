@@ -1,0 +1,3 @@
+Question;Answers
+Which Java collection keeps insertion order?;LinkedHashSet%true|HashSet%false|TreeSet%false
+What is the default value of a boolean field?;false%true|true%false|null%false
