@@ -1,7 +1,7 @@
 # Приложение для проведения тестирования на основе фиксированного списка вопросов
 ## Команда для запуска:
 
-`mvn compile exec:java -Dexec.mainClass=ru.otus.hw.Application`
+`mvn compile -pl hw01-xml-config exec:java -Dexec.mainClass=ru.otus.hw.Application`
 
 ```
 mvn clean package
