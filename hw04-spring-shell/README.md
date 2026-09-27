@@ -1,18 +1,9 @@
 # Приложение для проведения тестирования на основе фиксированного списка вопросов
 
-## Команда для запуска через терминал PowerShell:
-
+## Команда для запуска через терминал Idea:
 ```
 mvn clean package
 java -jar hw04-spring-shell/target/hw04-spring-shell-1.0.jar
-```
-## Команда для запуска через терминал Idea:
-```
-cd E:\Intelij_Idea\otus2026\dz\2026-08-otus-spring-timofeeva\hw04-spring-shell 
-$env:JAVA_HOME = 'C:\Program Files\JetBrains\IntelliJ IDEA 2025.3.2\jbr'
-& 'C:\Program Files\JetBrains\IntelliJ IDEA 2025.3.2\plugins\maven\lib\maven3\bin\mvn.cmd' clean package
-& 'C:\Program Files\JetBrains\IntelliJ IDEA 2025.3.2\jbr\bin\java.exe' `
-  -jar target\hw04-spring-shell-1.0.jar
 ```
 ## Описание работы
 Для запуска тестирования используется команда Spring Shell.
