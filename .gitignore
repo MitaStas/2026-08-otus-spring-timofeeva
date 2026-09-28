@@ -16,4 +16,5 @@ target/
 *.ipr
 *.mvn
 *.class
+*.log
 
