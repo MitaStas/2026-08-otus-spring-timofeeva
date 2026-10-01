@@ -1,0 +1,8 @@
+${AnsiBackground.GREEN}${AnsiColor.BLACK}     __            _                ${AnsiBackground.DEFAULT}
+${AnsiBackground.GREEN}${AnsiColor.BLACK}    / _\_ __  _ __(_)_ __   __ _    ${AnsiBackground.DEFAULT}
+${AnsiBackground.GREEN}${AnsiColor.BLACK}    \ \| '_ \| '__| | '_ \ / _` |   ${AnsiBackground.DEFAULT}
+${AnsiBackground.GREEN}${AnsiColor.BLACK}    _\ \ |_) | |  | | | | | (_| |   ${AnsiBackground.DEFAULT}
+${AnsiBackground.GREEN}${AnsiColor.BLACK}    \__/ .__/|_|  |_|_| |_|\__, |   ${AnsiBackground.DEFAULT}
+${AnsiBackground.GREEN}${AnsiColor.BLACK}       |_|                 |___/    ${AnsiBackground.DEFAULT}${AnsiColor.DEFAULT}${AnsiBackground.DEFAULT}
+${AnsiColor.GREEN}Powered by Spring Boot ${spring-boot.version}
+${AnsiColor.DEFAULT}
