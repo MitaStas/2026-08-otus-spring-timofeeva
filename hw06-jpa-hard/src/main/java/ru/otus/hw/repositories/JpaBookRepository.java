@@ -24,7 +24,7 @@ public class JpaBookRepository implements BookRepository {
                         select b
                         from Book b
                         join fetch b.author
-                        join fetch b.genres
+                        left join fetch b.genres
                         where b.id = :id
                         """, Book.class
         );
@@ -39,7 +39,7 @@ public class JpaBookRepository implements BookRepository {
                         select distinct b
                         from Book b
                         join fetch b.author
-                        join fetch b.genres
+                        left join fetch b.genres
                         """, Book.class
         ).getResultList();
     }

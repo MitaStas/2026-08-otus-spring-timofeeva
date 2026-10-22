@@ -37,6 +37,8 @@ class JpaBookRepositoryTest {
 
     private Book secondBook;
 
+    private Book thirdBook;
+
     @BeforeEach
     void setUp() {
         firstAuthor = entityManager.persist(new Author(0, "Author one"));
@@ -46,6 +48,7 @@ class JpaBookRepositoryTest {
         var thirdGenre = entityManager.persist(new Genre(0, "Genre three"));
         firstBook = entityManager.persist(new Book(0, "First book", firstAuthor, List.of(firstGenre, secondGenre)));
         secondBook = entityManager.persist(new Book(0, "Second book", secondAuthor, List.of(thirdGenre)));
+        thirdBook = entityManager.persist(new Book(0, "Third book", firstAuthor, List.of()));
         entityManager.persist(new Comment(0, "First comment", firstBook));
         entityManager.flush();
         entityManager.clear();
@@ -61,14 +64,23 @@ class JpaBookRepositoryTest {
     }
 
     @Test
+    void shouldFindBookWithAuthorAndWithoutGenresById() {
+        var actual = repository.findById(thirdBook.getId()).orElseThrow();
+        assertThat(actual.getTitle()).isEqualTo("Third book");
+        assertThat(actual.getAuthor().getId()).isEqualTo(firstAuthor.getId());
+        assertThat(actual.getGenres()).isEmpty();
+    }
+
+
+    @Test
     void shouldFindAllBooks() {
         var books = repository.findAll();
         assertThat(books).extracting(Book::getId)
-                .containsExactlyInAnyOrder(firstBook.getId(), secondBook.getId());
-        assertThat(books).allSatisfy(book -> {
-            assertThat(book.getAuthor()).isNotNull();
-            assertThat(book.getGenres()).isNotEmpty();
-        });
+                .containsExactlyInAnyOrder(firstBook.getId(), secondBook.getId(), thirdBook.getId());
+        assertThat(books).allSatisfy(book -> assertThat(book.getAuthor()).isNotNull());
+        assertThat(books.get(0).getGenres()).hasSize(2);
+        assertThat(books.get(1).getGenres()).hasSize(1);
+        assertThat(books.get(2).getGenres()).isEmpty();
     }
 
     @Test
