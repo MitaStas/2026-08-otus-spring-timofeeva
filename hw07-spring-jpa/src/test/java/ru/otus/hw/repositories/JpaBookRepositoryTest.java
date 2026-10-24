@@ -31,8 +31,6 @@ class JpaBookRepositoryTest {
 
     private Genre secondGenre;
 
-    private Comment comment;
-
     private Book firstBook;
 
     private Book secondBook;
@@ -49,7 +47,6 @@ class JpaBookRepositoryTest {
         firstBook = entityManager.persist(new Book(0, "First book", firstAuthor, List.of(firstGenre, secondGenre)));
         secondBook = entityManager.persist(new Book(0, "Second book", secondAuthor, List.of(thirdGenre)));
         thirdBook = entityManager.persist(new Book(0, "Third book", firstAuthor, List.of()));
-        firstBook.addComment(comment);
         entityManager.persist(new Comment(0, "First comment", firstBook));
         entityManager.flush();
         entityManager.clear();
