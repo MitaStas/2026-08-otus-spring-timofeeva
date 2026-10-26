@@ -1,0 +1,25 @@
+spring:
+  data:
+    mongodb:
+      port: 55290
+      database: library
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: INFO
+    org.springframework.data.mongodb.repository.query: INFO
+    org.mongodb.driver.protocol.command: INFO
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 8.0.16
+        storage:
+          repl-set-name: rs0
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.hw.mongock.changelog
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
