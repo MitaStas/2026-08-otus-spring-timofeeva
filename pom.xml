@@ -18,5 +18,6 @@
         <module>hw05-jdbc-hard</module>
         <module>hw06-jpa-hard</module>
         <module>hw07-spring-jpa</module>
+        <module>hw09-spring-mvc</module>
     </modules>
 </project>
