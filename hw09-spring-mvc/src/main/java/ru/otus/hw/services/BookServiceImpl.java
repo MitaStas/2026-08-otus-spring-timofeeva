@@ -65,7 +65,11 @@ public class BookServiceImpl implements BookService {
         if (isEmpty(genres) || genresIds.size() != genres.size()) {
             throw new EntityNotFoundException("One or all genres with ids %s not found".formatted(genresIds));
         }
-        var book = bookRepository.findById(id).orElse(new Book());
+        var book = id == 0
+                ? new Book()
+                : bookRepository
+                    .findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Book with id %s not found".formatted(id)));
         book.setTitle(title);
         book.setAuthor(author);
         book.setGenres(genres);
