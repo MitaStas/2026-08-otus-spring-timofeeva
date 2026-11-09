@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit book</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" href="/static/styles.css"/>
+</head>
+<body>
+
+<form id="edit-form" action="editAuthor.html" th:action="@{/author(id=${author.id})}" th:method="post" th:object="${author}">
+    <h3 class="title-authors">Авторы:</h3>
+
+    <div class="row">
+        <label for="id-input">ID:</label>
+        <input id="id-input" type="text" readonly="readonly" th:field="*{id}" value="1"/>
+    </div>
+
+    <div class="row">
+        <label for="author-fullName-input">Полное имя:</label>
+        <input id="author-fullName-input" type="text" th:field="*{fullName}" value="Pushkin"/>
+        <div class="errors" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Wrong person name error</div>
+    </div>
+
+    <div class="row">
+        <button type="submit">Сохранить</button>
+        <a href="listAuthors.html" th:href="@{/authors}"><button type="button" >Отмена</button></a>
+    </div>
+</form>
+
+</body>
+</html>

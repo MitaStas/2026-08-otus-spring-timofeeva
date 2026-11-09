@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Список авторов</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" href="/static/styles.css"/>
+</head>
+<body>
+
+<h3 class="title-books"><a th:href="@{/}" href="listBooks.html">Книги</a></h3>
+<h3 class="title-genres"><a th:href="@{/genres}" href="listGenres.html">Жанры</a></h3>
+<h3 class="title-authors">Авторы:</h3>
+
+<form th:action="@{/authors}" method="post">
+    <label>
+        Имя автора
+        <input type="text" name="fullName" required="required"/>
+    </label>
+    <button type="submit">Добавить</button>
+</form>
+
+<table class="authors">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="author : ${authors}">
+        <td th:text="${author.id}">1</td>
+        <td th:text="${author.fullName}">John Doe</td>
+        <td>
+            <a th:href="@{/authors/{id}(id=${author.id})}">Редактировать</a>
+        </td>
+        <td>
+            <form th:action="@{/authors/{id}(id=${author.id})}" method="post">
+                <input type="hidden" name="_method" value="DELETE"/>
+                <button type="submit">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
