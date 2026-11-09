@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.otus.hw.dto.AuthorDto;
+import ru.otus.hw.dto.BookDto;
+import ru.otus.hw.dto.GenreDto;
 import ru.otus.hw.exceptions.EntityNotFoundException;
+import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.models.Author;
-import ru.otus.hw.models.Book;
-import ru.otus.hw.models.Comment;
 import ru.otus.hw.models.Genre;
 import ru.otus.hw.services.AuthorService;
 import ru.otus.hw.services.BookService;
@@ -16,10 +18,8 @@ import ru.otus.hw.services.CommentService;
 import ru.otus.hw.services.GenreService;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -51,7 +51,6 @@ class BookControllerTest {
     @Test
     void shouldShowBooks() throws Exception {
         when(bookService.findAll()).thenReturn(List.of(book()));
-        when(commentService.findByBookId(1L)).thenReturn(List.of(new Comment(4L, "Comment", book())));
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("listBooks"))
@@ -60,20 +59,20 @@ class BookControllerTest {
 
     @Test
     void shouldShowFormForExistingBook() throws Exception {
-        when(bookService.findById(1L)).thenReturn(Optional.of(book()));
+        when(bookService.findById(1L)).thenReturn(book());
         when(authorService.findAll()).thenReturn(List.of(new Author(2L, "Author")));
         when(genreService.findAll()).thenReturn(List.of(new Genre(3L, "Genre")));
         mockMvc.perform(get("/books").param("id", "1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("editBook"))
-                .andExpect(model().attributeExists("book", "authors", "genres"));
+                .andExpect(model().attributeExists("book", "bookRequest", "authors", "genres"));
     }
 
     @Test
     void shouldShowErrorPageWhenBookNotFound() throws Exception {
-        when(bookService.findById(100L)).thenReturn(Optional.empty());
+        when(bookService.findById(100L)).thenThrow(new NotFoundException());
         mockMvc.perform(get("/books").param("id", "100"))
-                .andExpect(status().isOk())
+                .andExpect(status().isNotFound())
                 .andExpect(view().name("customError"))
                 .andExpect(model().attribute("errorText", "Сущность не найдена"));
     }
@@ -87,7 +86,8 @@ class BookControllerTest {
                         .param("genreIds", "3", "4"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
-        verify(bookService).update(eq(0L), eq("NewBook"), eq(2L), eq(Set.of(3L, 4L)));
+        verify(bookService).insert(new BookDto(0L, "NewBook", new AuthorDto(2L, null),
+                List.of(new GenreDto(3L, null), new GenreDto(4L, null)), List.of()));
     }
 
     @Test
@@ -99,7 +99,8 @@ class BookControllerTest {
                         .param("genreIds", "3"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
-        verify(bookService).update(eq(1L), eq("Updated"), eq(2L), eq(Set.of(3L)));
+        verify(bookService).update(new BookDto(1L, "Updated", new AuthorDto(2L, null),
+                List.of(new GenreDto(3L, null)), List.of()));
     }
 
     @Test
@@ -108,6 +109,16 @@ class BookControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
         verify(bookService).deleteById(1L);
+    }
+
+    @Test
+    void shouldShowInternalServerErrorWhenUnexpectedExceptionOccurs() throws Exception {
+        doThrow(new IllegalStateException("Unexpected error")).when(bookService).deleteById(1L);
+
+        mockMvc.perform(delete("/books").param("id", "1"))
+                .andExpect(status().isInternalServerError())
+                .andExpect(view().name("customError"))
+                .andExpect(model().attribute("errorText", "Внутренняя ошибка сервера"));
     }
 
     @Test
@@ -121,7 +132,7 @@ class BookControllerTest {
                         .param("genreIds", "3"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("editBook"))
-                .andExpect(model().attributeHasErrors("book"));
+                .andExpect(model().attributeHasErrors("bookRequest"));
     }
 
     @Test
@@ -133,7 +144,7 @@ class BookControllerTest {
                         .param("genreIds", "3"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("editBook"))
-                .andExpect(model().attributeHasErrors("book"));
+                .andExpect(model().attributeHasErrors("bookRequest"));
         verifyNoInteractions(bookService);
     }
 
@@ -147,14 +158,15 @@ class BookControllerTest {
                         .param("authorId", "2"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("editBook"))
-                .andExpect(model().attributeHasErrors("book"));
+                .andExpect(model().attributeHasErrors("bookRequest"));
         verifyNoInteractions(bookService);
     }
 
     @Test
     void shouldReturnEditPageWhenBookServiceCannotFindRelatedEntity() throws Exception {
         prepareBookFormAttributes();
-        when(bookService.update(0L, "NewBook", 2L, Set.of(3L)))
+        when(bookService.insert(new BookDto(0L, "NewBook", new AuthorDto(2L, null),
+                List.of(new GenreDto(3L, null)), List.of())))
                 .thenThrow(new EntityNotFoundException("Автор с таким ID не найден"));
         mockMvc.perform(post("/books")
                         .param("id", "0")
@@ -163,7 +175,7 @@ class BookControllerTest {
                         .param("genreIds", "3"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("editBook"))
-                .andExpect(model().attributeHasErrors("book"));
+                .andExpect(model().attributeHasErrors("bookRequest"));
     }
 
     private void prepareBookFormAttributes() {
@@ -171,9 +183,8 @@ class BookControllerTest {
         when(genreService.findAll()).thenReturn(List.of(new Genre(3L, "Genre")));
     }
 
-    private Book book() {
-        var book = new Book(1L, "Book", new Author(2L, "Author"), List.of(new Genre(3L, "Genre")));
-        book.setComments(Set.of(new Comment(4L, "Comment", book)));
-        return book;
+    private BookDto book() {
+        return new BookDto(1L, "Book", new AuthorDto(2L, "Author"),
+                List.of(new GenreDto(3L, "Genre")), List.of());
     }
 }

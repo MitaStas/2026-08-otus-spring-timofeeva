@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.support.TransactionTemplate;
+import ru.otus.hw.dto.GenreDto;
+import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
@@ -16,6 +18,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("Интеграционные тесты сервисов книг и комментариев")
 @SpringBootTest(properties = "spring.shell.interactive.enabled=false")
@@ -55,11 +58,11 @@ class BookAndCommentServiceIntegrationTest {
 
     @Test
     void shouldAllowUsingBookRelationsAfterServiceTransaction() {
-        var book = bookService.findById(fixture.bookId()).orElseThrow();
+        var book = bookService.findById(fixture.bookId());
         assertThatCode(() -> book.getAuthor().getFullName()).doesNotThrowAnyException();
         assertThatCode(() -> book.getGenres().get(0).getName()).doesNotThrowAnyException();
         assertThat(book.getAuthor().getFullName()).isEqualTo("Service author");
-        assertThat(book.getGenres()).extracting(Genre::getName).containsExactly("Service genre");
+        assertThat(book.getGenres()).extracting(GenreDto::getName).containsExactly("Service genre");
     }
 
     @Test
@@ -82,9 +85,9 @@ class BookAndCommentServiceIntegrationTest {
     void shouldDeleteBookAndComment() {
         bookService.deleteById(fixture.bookId);
         var comment = commentService.findById(fixture.commentId);
-        var book = bookService.findById(fixture.bookId);
         var comments = commentService.findByBookId(fixture.bookId);
-        assertThat(book).isEmpty();
+        assertThatThrownBy(() -> bookService.findById(fixture.bookId))
+                .isInstanceOf(NotFoundException.class);
         assertThat(comment).isEmpty();
         assertThat(comments).isEmpty();
     }

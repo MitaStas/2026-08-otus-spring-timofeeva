@@ -1,8 +1,8 @@
-package ru.otus.hw.controller;
+package ru.otus.hw.exceptions;
 
 public class NotFoundException extends RuntimeException {
 
-    NotFoundException() {
+    public NotFoundException() {
         super("Entity not found");
     }
 }

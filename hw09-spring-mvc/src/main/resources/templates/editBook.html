@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8"/>
     <title th:text="${book.id == 0 ? 'Добавить книгу' : 'Редактировать книгу'}">Редактировать книгу</title>
-    <link rel="stylesheet" th:href="@{/styles.css}" href="/styles.css"/>
+    <link rel="stylesheet" th:href="@{/styles.css}" href="/static/styles.css"/>
 </head>
 <body>
 
-<form id="edit-form" action="editBook.html" th:action="@{/books(id=${book.id})}" th:method="post" th:object="${book}">
-    <h3 class="title-books" th:text="${book.id == 0 ? 'Добавить книгу' : 'Редактировать книгу'}">Редактировать книгу</h3>
-
-    <div class="errors" th:if="${#fields.hasAnyErrors()}">
-        <p th:each="error : ${#fields.allErrors()}" th:text="${error}">Ошибка сохранения</p>
-    </div>
+<form id="edit-form" action="editBook.html" th:action="@{/books}" th:method="post" th:object="${bookRequest}">
+    <h3 class="title-books" th:text="${bookRequest.id == 0 ? 'Добавить книгу' : 'Редактировать книгу'}">Редактировать книгу</h3>
 
     <div class="row">
         <label for="id-input">ID:</label>
@@ -27,26 +23,27 @@
 
     <div class="row">
         <label for="book-author-select">Автор:</label>
-        <select id="book-author-select" name="authorId">
+        <select id="book-author-select" th:field="*{authorId}">
+            <option value="">Выберите автора</option>
             <option th:each="author : ${authors}"
                     th:value="${author.id}"
-                    th:text="${author.fullName}"
-                    th:selected="${book.author != null and book.author.id == author.id}">John Doe</option>
+                    th:text="${author.fullName}">John Doe</option>
         </select>
+        <div class="errors" th:if="${#fields.hasErrors('authorId')}" th:errors="*{authorId}">Ошибка автора</div>
     </div>
 
     <div class="row">
         <label for="book-hobby-select">Жанры:</label>
-        <select id="book-hobby-select" name="genreIds" multiple>
+        <select id="book-hobby-select" th:field="*{genreIds}" multiple>
             <option th:each="genre : ${genres}"
                     th:value="${genre.id}"
-                    th:text="${genre.name}"
-                    th:selected="${book.genres != null and book.genres.contains(genre)}">Comedy</option>
+                    th:text="${genre.name}">Comedy</option>
         </select>
+        <div class="errors" th:if="${#fields.hasErrors('genreIds')}" th:errors="*{genreIds}">Ошибка жанров</div>
     </div>
 
     <div class="row">
-        <button type="submit" th:text="${book.id == 0 ? 'Добавить' : 'Сохранить'}">Сохранить</button>
+        <button type="submit" th:text="${bookRequest.id == 0 ? 'Добавить' : 'Сохранить'}">Сохранить</button>
         <a href="list.html" th:href="@{/}"><button type="button" >Отмена</button></a>
     </div>
 </form>
