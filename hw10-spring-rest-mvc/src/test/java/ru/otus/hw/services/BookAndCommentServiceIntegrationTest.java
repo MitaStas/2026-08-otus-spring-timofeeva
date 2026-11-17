@@ -63,22 +63,6 @@ class BookAndCommentServiceIntegrationTest {
         assertThat(book.getGenres()).extracting(GenreDto::getName).containsExactly("Service genre");
     }
 
-//    @Test
-//    void shouldAllowUsingCommentBookAfterServiceTransaction() {
-//        var comment = commentService.findById(fixture.commentId());
-//        assertThatCode(() -> comment.getBook().getTitle()).doesNotThrowAnyException();
-//        assertThat(comment.getBook().getTitle()).isEqualTo("Service book");
-//    }
-
-//    @Test
-//    void shouldAllowUsingBooksOfCommentsAfterServiceTransaction() {
-//        var comments = commentService.findByBookId(fixture.bookId());
-//        assertThatCode(() -> comments.forEach(comment -> comment.getBook().getTitle()))
-//                .doesNotThrowAnyException();
-//        assertThat(comments).extracting(comment -> comment.getBook().getTitle())
-//                .containsExactly("Service book");
-//    }
-
     @Test
     void shouldDeleteBookAndComment() {
         bookService.deleteById(fixture.bookId);
