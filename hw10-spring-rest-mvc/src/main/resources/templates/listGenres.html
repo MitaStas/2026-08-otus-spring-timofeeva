@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Список жанров</title>
+    <link rel="stylesheet" href="/styles.css"/>
+    <script src="/genres.js" defer></script>
+</head>
+<body>
+
+<h3 class="title-authors"><a href="/authors">Авторы</a></h3>
+<h3 class="title-books"><a href="/">Книги</a></h3>
+<h3 class="title-genres">Жанры:</h3>
+
+<form id="create-genre-form" onsubmit="createGenre(event)" novalidate>
+    <label for="genre-name-input">Название жанра</label>
+    <input id="genre-name-input" type="text" required="required"/>
+    <button type="submit">Добавить</button>
+</form>
+<p id="genre-error" class="errors" role="alert" hidden></p>
+
+<table class="genres">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody id="genres-list"></tbody>
+</table>
+
+<template id="genre-row-template">
+    <tr>
+        <td data-genre-id></td>
+        <td><input type="text" data-genre-name required="required"/></td>
+        <td>
+            <button type="button" onclick="updateGenre(this)" data-update-genre>Сохранить</button>
+            <button type="button" onclick="deleteGenre(this)" data-delete-genre>Удалить</button>
+        </td>
+    </tr>
+</template>
+
+</body>
+</html>

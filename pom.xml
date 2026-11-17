@@ -19,5 +19,6 @@
         <module>hw06-jpa-hard</module>
         <module>hw07-spring-jpa</module>
         <module>hw08-spring-mongodb</module>
+        <module>hw10-spring-rest-mvc</module>
     </modules>
 </project>

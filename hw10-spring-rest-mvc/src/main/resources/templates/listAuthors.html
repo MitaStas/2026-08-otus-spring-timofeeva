@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Список авторов</title>
+    <link rel="stylesheet" href="/styles.css"/>
+    <script src="/authors.js" defer></script>
+</head>
+<body>
+
+<h3 class="title-books"><a href="/">Книги</a></h3>
+<h3 class="title-genres"><a href="/genres">Жанры</a></h3>
+<h3 class="title-authors">Авторы:</h3>
+
+<form id="create-author-form" onsubmit="createAuthor(event)" novalidate>
+    <label for="author-full-name-input">Имя автора</label>
+    <input id="author-full-name-input" type="text" required="required"/>
+    <button type="submit">Добавить</button>
+</form>
+<p id="author-error" class="errors" role="alert" hidden></p>
+
+<table class="authors">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody id="authors-list"></tbody>
+</table>
+
+<template id="author-row-template">
+    <tr>
+        <td data-author-id></td>
+        <td><input type="text" data-author-full-name required="required"/></td>
+        <td>
+            <button type="button" onclick="updateAuthor(this)" data-update-author>Сохранить</button>
+            <button type="button" onclick="deleteAuthor(this)" data-delete-author>Удалить</button>
+        </td>
+    </tr>
+</template>
+
+</body>
+</html>
