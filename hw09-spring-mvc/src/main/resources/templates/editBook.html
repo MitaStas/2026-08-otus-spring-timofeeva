@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${book.id == 0 ? 'Добавить книгу' : 'Редактировать книгу'}">Редактировать книгу</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" href="/static/styles.css"/>
+</head>
+<body>
+
+<form id="edit-form" action="editBook.html" th:action="@{/books}" th:method="post" th:object="${bookRequest}">
+    <h3 class="title-books" th:text="${bookRequest.id == 0 ? 'Добавить книгу' : 'Редактировать книгу'}">Редактировать книгу</h3>
+
+    <div class="row">
+        <label for="id-input">ID:</label>
+        <input id="id-input" type="text" readonly="readonly" th:field="*{id}" value="0"/>
+    </div>
+
+    <div class="row">
+        <label for="book-title-input">Название:</label>
+        <input id="book-title-input" type="text" th:field="*{title}" value="John Doe"/>
+        <div class="errors" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Wrong person name error</div>
+    </div>
+
+    <div class="row">
+        <label for="book-author-select">Автор:</label>
+        <select id="book-author-select" th:field="*{authorId}">
+            <option value="">Выберите автора</option>
+            <option th:each="author : ${authors}"
+                    th:value="${author.id}"
+                    th:text="${author.fullName}">John Doe</option>
+        </select>
+        <div class="errors" th:if="${#fields.hasErrors('authorId')}" th:errors="*{authorId}">Ошибка автора</div>
+    </div>
+
+    <div class="row">
+        <label for="book-hobby-select">Жанры:</label>
+        <select id="book-hobby-select" th:field="*{genreIds}" multiple>
+            <option th:each="genre : ${genres}"
+                    th:value="${genre.id}"
+                    th:text="${genre.name}">Comedy</option>
+        </select>
+        <div class="errors" th:if="${#fields.hasErrors('genreIds')}" th:errors="*{genreIds}">Ошибка жанров</div>
+    </div>
+
+    <div class="row">
+        <button type="submit" th:text="${bookRequest.id == 0 ? 'Добавить' : 'Сохранить'}">Сохранить</button>
+        <a href="list.html" th:href="@{/}"><button type="button" >Отмена</button></a>
+    </div>
+</form>
+
+<section th:if="${book.id != 0}">
+    <h3>Комментарии</h3>
+
+    <ul>
+        <li th:each="comment : ${book.comments}">
+            <span th:text="${comment.text}">Комментарий</span>
+            <form th:action="@{/comments/{id}(id=${comment.id})}" method="post" class="inline-form">
+                <input type="hidden" name="bookId" th:value="${book.id}"/>
+                <input type="hidden" name="_method" value="DELETE"/>
+                <button type="submit">Удалить</button>
+            </form>
+        </li>
+    </ul>
+
+    <form th:action="@{/comments}" method="post">
+        <input type="hidden" name="bookId" th:value="${book.id}"/>
+        <label for="comment-text-input">Новый комментарий:</label>
+        <input id="comment-text-input" type="text" name="text" required="required"/>
+        <button type="submit">Добавить</button>
+    </form>
+</section>
+
+</body>
+</html>
