@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Книга</title>
+    <link rel="stylesheet" href="/styles.css"/>
+    <script src="/books.js" defer></script>
+</head>
+<body>
+
+<form id="edit-form" novalidate>
+    <h3 class="title-books">Книга</h3>
+
+    <div class="row">
+        <label for="id-input">ID:</label>
+        <input id="id-input" name="id" type="text" readonly="readonly" value="0"/>
+    </div>
+
+    <div class="row">
+        <label for="book-title-input">Название:</label>
+        <input id="book-title-input" name="title" type="text" required="required"/>
+        <div id="title-error" class="errors" hidden></div>
+    </div>
+
+    <div class="row">
+        <label for="book-author-select">Автор:</label>
+        <select id="book-author-select" name="authorId" required="required">
+            <option value="">Выберите автора</option>
+        </select>
+        <div id="authorId-error" class="errors" hidden></div>
+    </div>
+
+    <div class="row">
+        <label for="book-genre-select">Жанры:</label>
+        <select id="book-genre-select" name="genreIds" multiple required="required"></select>
+        <div id="genreIds-error" class="errors" hidden></div>
+    </div>
+
+    <div class="row">
+        <button type="submit">Сохранить</button>
+        <a href="/"><button type="button">Отмена</button></a>
+    </div>
+</form>
+
+<section id="comments-section" hidden>
+    <h3>Комментарии</h3>
+
+    <ul id="comments-list"></ul>
+
+    <form id="comment-form">
+        <input id="comment-book-id" type="hidden" name="bookId"/>
+        <label for="comment-text-input">Новый комментарий:</label>
+        <input id="comment-text-input" type="text" name="text" required="required"/>
+        <button type="submit">Добавить</button>
+    </form>
+</section>
+
+<template id="comment-template">
+    <li>
+        <span data-comment-text></span>
+        <button onclick="deleteComment(this)" type="button" class="inline-form" data-delete-comment>Удалить</button>
+    </li>
+</template>
+
+</body>
+</html>

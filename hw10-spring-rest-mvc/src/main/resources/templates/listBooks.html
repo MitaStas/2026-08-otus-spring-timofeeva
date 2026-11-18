@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Список книг</title>
+    <link rel="stylesheet" href="/styles.css"/>
+    <script src="/books.js" defer></script>
+</head>
+<body>
+
+
+<h3 class="title-authors"><a href="/authors">Авторы</a></h3>
+<h3 class="title-genres"><a href="/genres">Жанры</a></h3>
+<h3 class="title-books">Книги:</h3>
+<p><a href="/books">Добавить книгу</a></p>
+
+<table class="books">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Автор</th>
+        <th>Жанры</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody id="books-list"></tbody>
+</table>
+
+<template id="book-row-template">
+    <tr>
+        <td data-book-id></td>
+        <td data-book-title></td>
+        <td data-book-author></td>
+        <td data-book-genres></td>
+        <td><a data-edit-book>Редактировать</a></td>
+        <td><button type="button" data-delete-book>Удалить</button></td>
+    </tr>
+</template>
+
+</body>
+</html>

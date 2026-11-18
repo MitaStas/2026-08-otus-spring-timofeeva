@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Список всех книг</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" href="/static/styles.css"/>
+</head>
+<body>
+    <h3 th:text="${errorText}">Текст ошибки</h3>
+    <a th:href="@{/}" href="listBooks.html">На главную</a>
+</body>
+</html>
